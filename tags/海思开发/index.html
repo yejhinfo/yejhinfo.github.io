@@ -12,7 +12,7 @@
     
     
     
-    <title>斐波那契变形 | 染玥</title>
+    <title>标签: 海思开发 | 染玥</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -167,88 +167,33 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <div class="cube-article">
-    <h1 class="title">斐波那契变形</h1>
+            <style>
+    @media(max-width: 768px) {
+        body {
+            background-color: #fff!important;
+        }
+    }
+</style>
+<div class="cube-archives">
     
-    <div class="cube-article-header">
-        <div class="cube-article-date">
-            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
-            <!-- moment.js对象 -->
-            2020-06-05
-        </div>
-        <div class="cube-article-tags">
-    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
-    
-    <a href="/tags/hdoj/">#hdoj</a>
-    
-</div>
+    <div class="cube-archive" style="margin-top: 0;">
+        <h1 class="title">海思开发</h1>
+        
+        <ul class="posts">
+            
+            <li class="post">
+                <a href="/2020/06/05/text3/">基于海思HI3519V101—SPI应用编程驱动TMC5041</a>
+            </li>
+            
+            <li class="post">
+                <a href="/2020/06/05/text4/">基于海思HI3519V101-串口应用编程</a>
+            </li>
+            
+        </ul>
+        
     </div>
     
-    <div class="cube-article-content cube-markdown">
-        
-        <pre><code class="cpp">这个是最重要的假设：假设我已获得了求解这道问题的函数fib（），只要输入n是多少就能得到从1开始到a的方案
-A:蜜蜂要从1走到a的方案是fib（a）
-//要知道到a的方案，就要知道a-1和a-2的方案就和爬楼梯一样
-B:蜜蜂要从1走到a的方案是fib（b）
-所以：蜜蜂从a走到b的方案是fib（b-a）；（b&gt;a）
-#include&lt;bits/stdc++.h&gt;
-
-using namespace std;
-
-//此题类似于2041  斐波那契数列  
-
-int main(){
-    int n;
-    cin &gt;&gt; n;
-
-    long long f[55];        //注意！数组要用 long long 型 两个整数a和b(0&lt;a&lt;b&lt;50)。
-    f[1] = 1; f[2] = 2;
-//从三开始方案就等于前两项的和
-    for (int i = 3; i &lt;= 55; i++)
-    {
-//斐波那契数列，后一项等于前两项的和
-        f[i] = f[i - 1] + f[i - 2];
-    }
-
-
-    while (n--)
-    {
-        int a, b;
-        cin &gt;&gt; a &gt;&gt; b;
-        //首先计算出从1到a点的路线和
-        //在计算出1到b点的路线和
-        //那么从a到b点的路线和就是两路线的差值
-        //比如1到4是3条路线
-        //1到3是2条路线，那么3到4就是1条路线
-        cout &lt;&lt; f[b - a] &lt;&lt; endl;
-
-    }
-    //system(&quot;pause&quot;);
-    return 0;
-}</code></pre>
-
-    </div>
 </div>
-
-<div class="cube-article-nav">
-    <ul>
-        
-        <li class="prev">
-            <a href="/2020/06/05/hello-world/">
-                <i class="cube-icon cube-prev" aria-hidden="true"></i>
-                Hello World
-            </a>
-        </li>
-        
-        
-    </ul>
-</div>
-
-
-<!-- TODO 根据theme.comment的内容进行入口选择 -->
-
-
-
         </div>
         <div class="cube-right">
             
@@ -398,7 +343,7 @@ int main(){
     <div class="cube-boxs">
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/%E7%AE%97%E6%B3%95/">#算法</a>
         </div>
         
@@ -424,7 +369,7 @@ int main(){
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/tags/%E6%B5%B7%E6%80%9D%E5%BC%80%E5%8F%91/">#海思开发</a>
         </div>
         
