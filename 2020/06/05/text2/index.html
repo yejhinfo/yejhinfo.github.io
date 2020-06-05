@@ -12,7 +12,7 @@
     
     
     
-    <title>标签: hdoj | 染玥</title>
+    <title>P2045涂格子（fib） | 染玥</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -167,33 +167,79 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <style>
-    @media(max-width: 768px) {
-        body {
-            background-color: #fff!important;
-        }
-    }
-</style>
-<div class="cube-archives">
+            <div class="cube-article">
+    <h1 class="title">P2045涂格子（fib）</h1>
     
-    <div class="cube-archive" style="margin-top: 0;">
-        <h1 class="title">hdoj</h1>
-        
-        <ul class="posts">
-            
-            <li class="post">
-                <a href="/2020/06/05/text2/">P2045涂格子（fib）</a>
-            </li>
-            
-            <li class="post">
-                <a href="/2020/06/05/text1/">斐波那契变形</a>
-            </li>
-            
-        </ul>
-        
-    </div>
+    <div class="cube-article-header">
+        <div class="cube-article-date">
+            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+            <!-- moment.js对象 -->
+            2020-06-05
+        </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/hdoj/">#hdoj</a>
     
 </div>
+    </div>
+    
+    <div class="cube-article-content cube-markdown">
+        
+        <p>有排成一行的ｎ个方格，用红(Red)、粉(Pink)、绿(Green)三色涂每个格子，每格涂一色，要求任何相邻的方格不能同色，且首尾两格也不同色．求全部的满足要求的涂法.</p>
+<p>一、总体思路（如果你只是需要代码，请直接看代码部分）<br>你应该重视思路，用C语言将之前数学课上的思路重现一下就好了！这些问题都可以归类到递归问题，因为每次涂色的时候考虑的情况大致类似，下面提供一种思考方式：为方便起见，<br>这个是最重要的假设：假设我已获得了求解这道问题的函数fib（），只要输入n是多少就能得到结果。</p>
+<p>我们先不管第一格到第三格怎么涂色，我们先考虑倒数第2格，也就是第n-1格怎么涂色？</p>
+<pre><code class="cpp">A、如果n-1个格子的颜色与1格子不同，那么第n个格子的颜色就被确定下来，只有一种。n-1个格子的涂色方案为fib（n-1）。n个格子的涂色方案为1*fib（n-1）。
+B:当n-1和1的颜色相同那这时候，前n-1个方块的颜色方案为fib（n-2）（因为第n-1个颜色是确定的）。那么因为第n个格子可以涂两种颜色，所以n个格子的方案是2*fib（n-2）
+
+
+上述的A、B是思考方式上的分类，说白了就是初中数学（中考最后一题）中要掌握的分类讨论思想---“要想解对题，此题的所有情况都要列出”，而不是我们C语言中，不是if就是else的互斥情况。
+
+综上，解决涂色问题的表达式是：方法总数=solve（n-1）*1+2*solve（n-2）；说到这，你也许就觉得懂了，但是你忘了，我们的这个函数是假设出来的，还没有实现呢！别着急，请看第二部分，实现过程。
+
+
+#include&lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+int main(){
+    int n;
+    long long fib[50] = { 3, 6, 6, 18 };//后面数据很大要用longlong
+    for (int i = 4; i &lt;= 49; i++)
+    {
+        fib[i] = fib[i - 1] +2 * fib[i - 2];
+    }
+    while (cin&gt;&gt;n)
+    {
+        cout &lt;&lt; fib[n-1] &lt;&lt; endl;
+    }
+    //system(&quot;pause&quot;);
+    return 0;
+}
+</code></pre>
+
+    </div>
+</div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2020/06/05/text1/">
+                斐波那契变形
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
+
+
+
         </div>
         <div class="cube-right">
             

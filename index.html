@@ -168,9 +168,9 @@
     <div class="cube-content">
         <div class="cube-left">
             
-<div class="cube-excerpt" id="cube-excerpt-Hello World">
+<div class="cube-excerpt" id="cube-excerpt-P2045涂格子（fib）">
     <header class="cube-excerpt-header">
-        <h1><a href="/2020/06/05/hello-world/">Hello World</a></h1>
+        <h1><a href="/2020/06/05/text2/">P2045涂格子（fib）</a></h1>
         <div class="cube-excerpt-header-msg">
             <div class="cube-excerpt-date">
                 <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
@@ -179,26 +179,50 @@
             <div class="cube-excerpt-tags">
                 <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
                 
+                <a href="/tags/hdoj/" class="cube-excerpt-tag-link">#hdoj</a>
+                
             </div>
         </div>
     </header>
     <article class="cube-excerpt-entry cube-markdown">
         
         
-           <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+           <p>有排成一行的ｎ个方格，用红(Red)、粉(Pink)、绿(Green)三色涂每个格子，每格涂一色，要求任何相邻的方格不能同色，且首尾两格也不同色．求全部的满足要求的涂法.</p>
+<p>一、总体思路（如果你只是需要代码，请直接看代码部分）<br>你应该重视思路，用C语言将之前数学课上的思路重现一下就好了！这些问题都可以归类到递归问题，因为每次涂色的时候考虑的情况大致类似，下面提供一种思考方式：为方便起见，<br>这个是最重要的假设：假设我已获得了求解这道问题的函数fib（），只要输入n是多少就能得到结果。</p>
+<p>我们先不管第一格到第三格怎么涂色，我们先考虑倒数第2格，也就是第n-1格怎么涂色？</p>
+<pre><code class="cpp">A、如果n-1个格子的颜色与1格子不同，那么第n个格子的颜色就被确定下来，只有一种。n-1个格子的涂色方案为fib（n-1）。n个格子的涂色方案为1*fib（n-1）。
+B:当n-1和1的颜色相同那这时候，前n-1个方块的颜色方案为fib（n-2）（因为第n-1个颜色是确定的）。那么因为第n个格子可以涂两种颜色，所以n个格子的方案是2*fib（n-2）
+
+
+上述的A、B是思考方式上的分类，说白了就是初中数学（中考最后一题）中要掌握的分类讨论思想---“要想解对题，此题的所有情况都要列出”，而不是我们C语言中，不是if就是else的互斥情况。
+
+综上，解决涂色问题的表达式是：方法总数=solve（n-1）*1+2*solve（n-2）；说到这，你也许就觉得懂了，但是你忘了，我们的这个函数是假设出来的，还没有实现呢！别着急，请看第二部分，实现过程。
+
+
+#include&lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+int main(){
+    int n;
+    long long fib[50] = { 3, 6, 6, 18 };//后面数据很大要用longlong
+    for (int i = 4; i &lt;= 49; i++)
+    {
+        fib[i] = fib[i - 1] +2 * fib[i - 2];
+    }
+    while (cin&gt;&gt;n)
+    {
+        cout &lt;&lt; fib[n-1] &lt;&lt; endl;
+    }
+    //system(&quot;pause&quot;);
+    return 0;
+}
+</code></pre>
 
         
     </article>
     <footer class="cube-excerpt-footer">
-        <a class="cube-excerpt-more" href="/2020/06/05/hello-world/">阅读全文</a>
+        <a class="cube-excerpt-more" href="/2020/06/05/text2/">阅读全文</a>
     </footer>
 </div>
 
@@ -269,6 +293,40 @@ int main(){
     </footer>
 </div>
 
+<div class="cube-excerpt" id="cube-excerpt-Hello World">
+    <header class="cube-excerpt-header">
+        <h1><a href="/2020/06/05/hello-world/">Hello World</a></h1>
+        <div class="cube-excerpt-header-msg">
+            <div class="cube-excerpt-date">
+                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+                2020-06-05
+            </div>
+            <div class="cube-excerpt-tags">
+                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+                
+            </div>
+        </div>
+    </header>
+    <article class="cube-excerpt-entry cube-markdown">
+        
+        
+           <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+        
+    </article>
+    <footer class="cube-excerpt-footer">
+        <a class="cube-excerpt-more" href="/2020/06/05/hello-world/">阅读全文</a>
+    </footer>
+</div>
+
 
 
 <ul class="cube-pagination cube-pagination-6">
@@ -334,7 +392,7 @@ int main(){
     <a title="Master record">Master record</a>
     
     <div class="count">
-        <a class="count articles"><span>2</span>文章</a>
+        <a class="count articles"><span>3</span>文章</a>
         <a class="count tags"><span>1</span>标签</a>
         <a class="count categories"><span>1</span>分类</a>
     </div>
@@ -373,7 +431,7 @@ int main(){
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2020/06/05/hello-world/" title="Hello World">Hello World</a>
+                    <a href="/2020/06/05/text2/" title="P2045涂格子（fib）">P2045涂格子（fib）</a>
                 </p>
             </div>
             
@@ -388,6 +446,19 @@ int main(){
                 </p>
                 <p class="title">
                     <a href="/2020/06/05/text1/" title="斐波那契变形">斐波那契变形</a>
+                </p>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="normal">
+                <p class="index">
+                    <span>3</span>
+                </p>
+                <p class="title">
+                    <a href="/2020/06/05/hello-world/" title="Hello World">Hello World</a>
                 </p>
             </div>
         </li>
