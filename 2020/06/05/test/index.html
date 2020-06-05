@@ -12,7 +12,7 @@
     
     
     
-    <title>Hello World | 月染霜华</title>
+    <title>进制转换 | 月染霜华</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -168,13 +168,13 @@
     <div class="cube-content">
         <div class="cube-left">
             <div class="cube-article">
-    <h1 class="title">Hello World</h1>
+    <h1 class="title">进制转换</h1>
     
     <div class="cube-article-header">
         <div class="cube-article-date">
             <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
             <!-- moment.js对象 -->
-            2020-06-04
+            2020-06-05
         </div>
         <div class="cube-article-tags">
     <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
@@ -184,19 +184,9 @@
     
     <div class="cube-article-content cube-markdown">
         
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h1 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;bits&#x2F;stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">	int n, r;</span><br><span class="line">	while (cin &gt;&gt; n &gt;&gt; r)</span><br><span class="line">	&#123;</span><br><span class="line">		if (n &lt; 0)</span><br><span class="line">		&#123;</span><br><span class="line">			cout &lt;&lt; &quot;-&quot;;</span><br><span class="line">			n &#x3D; abs(n);</span><br><span class="line">		&#125;</span><br><span class="line">		if (n &#x3D;&#x3D; 0)</span><br><span class="line">		&#123;</span><br><span class="line">			cout &lt;&lt; 0 &lt;&lt; endl;</span><br><span class="line">			continue;</span><br><span class="line">		&#125;</span><br><span class="line">		int j &#x3D; 0;</span><br><span class="line">		int str[50];</span><br><span class="line">&#x2F;&#x2F;进制转化</span><br><span class="line">		while (n)</span><br><span class="line">		&#123;</span><br><span class="line">			str[j] &#x3D; (n%r);</span><br><span class="line">			j++;</span><br><span class="line">			n &#x2F;&#x3D; r;</span><br><span class="line">		&#125;</span><br><span class="line">&#x2F;&#x2F;倒序输出</span><br><span class="line">		for (int i &#x3D; j - 1; i &gt;&#x3D; 0; i--)</span><br><span class="line">		&#123;</span><br><span class="line">			if (str[i] &gt;&#x3D; 10)</span><br><span class="line">			&#123;</span><br><span class="line">				printf(&quot;%c&quot;, &#39;A&#39; + str[i] - 10);</span><br><span class="line">			&#125;</span><br><span class="line">			else</span><br><span class="line">			&#123;</span><br><span class="line">				cout &lt;&lt; str[i];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	&#x2F;&#x2F;system(&quot;pause&quot;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>date: 2020-06-04 21:59:57<br>tags:hdoj</p>
+<hr>
 
     </div>
 </div>
@@ -205,9 +195,9 @@
     <ul>
         
         <li class="prev">
-            <a href="/2020/06/04/test/">
+            <a href="/2020/06/05/hello-world/">
                 <i class="cube-icon cube-prev" aria-hidden="true"></i>
-                test
+                Hello World
             </a>
         </li>
         
@@ -298,7 +288,7 @@
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2020/06/04/test/" title="test">test</a>
+                    <a href="/2020/06/05/hello-world/" title="Hello World">Hello World</a>
                 </p>
             </div>
             
@@ -312,7 +302,7 @@
                     <span>2</span>
                 </p>
                 <p class="title">
-                    <a href="/2020/06/04/hello-world/" title="Hello World">Hello World</a>
+                    <a href="/2020/06/05/test/" title="进制转换">进制转换</a>
                 </p>
             </div>
         </li>
