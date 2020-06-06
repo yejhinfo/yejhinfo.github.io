@@ -65,32 +65,17 @@
         
         <li>
             <i class="cube-icon cube-icon-home" aria-hidden="true"></i>
-            <a href="/">首页</a>
+            <a href="/">home</a>
         </li>
         
         <li>
             <i class="cube-icon cube-icon-archive" aria-hidden="true"></i>
-            <a href="/">归档</a>
-        </li>
-        
-        <li>
-            <i class="cube-icon cube-icon-categories" aria-hidden="true"></i>
-            <a href="/categories">分类</a>
-        </li>
-        
-        <li>
-            <i class="cube-icon cube-icon-tags" aria-hidden="true"></i>
-            <a href="/tags">标签</a>
+            <a href="/archives">archive</a>
         </li>
         
         <li>
             <i class="cube-icon cube-icon-about" aria-hidden="true"></i>
-            <a href="/about">关于我</a>
-        </li>
-        
-        <li>
-            <i class="cube-icon cube-icon-remain" aria-hidden="true"></i>
-            <a href="/remain">留言板</a>
+            <a href="/about-me">about</a>
         </li>
         
     </ul>
@@ -168,499 +153,6 @@
     <div class="cube-content">
         <div class="cube-left">
             
-<div class="cube-excerpt" id="cube-excerpt-基于海思HI3519V101—SPI应用编程驱动TMC5041">
-    <header class="cube-excerpt-header">
-        <h1><a href="/2020/06/05/text3/">基于海思HI3519V101—SPI应用编程驱动TMC5041</a></h1>
-        <div class="cube-excerpt-header-msg">
-            <div class="cube-excerpt-date">
-                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
-                2020-06-05
-            </div>
-            <div class="cube-excerpt-tags">
-                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
-                
-                <a href="/tags/%E6%B5%B7%E6%80%9D%E5%BC%80%E5%8F%91/" class="cube-excerpt-tag-link">#海思开发</a>
-                
-            </div>
-        </div>
-    </header>
-    <article class="cube-excerpt-entry cube-markdown">
-        
-        
-           <pre><code class="cpp">配合笔记参考http://note.youdao.com/noteshare?id=4d918ff95b075f08eb49aa081287d90f
-#include &lt;stdint.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;getopt.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;sys/ioctl.h&gt;
-#include &lt;linux/types.h&gt;
-#include &lt;linux/spi/spidev.h&gt;
-#include&lt;stdlib.h&gt;
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-
-static void pabort(const char *s)
-{
-      perror(s);
-      abort();
-
-}
-
-static const char *device = &quot;/dev/spidev1.0&quot;; //设备名
-static uint8_t mode;    //设备模式
-static uint8_t bits = 8;
-static uint32_t speed = 500000;
-static uint16_t delay;
-//对TMC寄存器的宏定义
-unsigned int GCONF = 0x00;                                    
-unsigned int CHOPCONF = 0x6c;                                 
-unsigned int IHOLD_IRUN = 0x30;                               
-unsigned int TZEROWAIT = 0x2c;                               
-unsigned int PWMCONF = 0x10;
-unsigned int VHIGH = 0x32;
-unsigned int VCOOLTHRS = 0x31;
-unsigned int RAMPMODE = 0x20;
-//速度参数寄存器
-unsigned int VSTART = 0x23;
-unsigned int A1 = 0x24;
-unsigned int V1 = 0x25;
-unsigned int AMAX = 0x26;
-unsigned int VMAX = 0x27;
-unsigned int DMAX = 0x28;
-unsigned int D1 = 0x2A;
-unsigned int VSTOP = 0x2B;
-
-//当前速度寄存器
-unsigned int VACTUAL = 0x22;
-//当前位置寄存器
-unsigned int XACTUAL = 0x21;
-//给定位置寄存器
-unsigned int XTARGET = 0x2D;
-/*******************************************************************
-* 名称：                sensor_write_register
-* 功能：                将信息通过SPI写入外挂设备的指定寄存器的信息
-* 入口参数：         fd        SPI文件描述符 
-*                              addr     设备寄存器地址
-*                              data   写入的数据
-*出口参数：          无
-*******************************************************************/  
-static void sensor_write_register(int fd,unsigned int addr, unsigned int data) 
-{
-
-      int ret;
-      //定义待发送的数据
-      uint8_t tx[5];
-      tx[0] = 0X80 | addr &amp; 0xff;
-      tx[1] = 0xff &amp; (data &gt;&gt; 24) ;
-      tx[2] = 0xff &amp; (data &gt;&gt; 16) ;
-      tx[3] = 0xff &amp; (data &gt;&gt; 8) ;
-      tx[4] = 0xff &amp; (data &gt;&gt; 0) ;
-
-      uint8_t rx[ARRAY_SIZE(tx)] = {0};
-      struct spi_ioc_transfer tr = {
-
-             .tx_buf = (unsigned long)tx,   //定义发送缓冲区指针
-             .rx_buf = (unsigned long)rx,   //定义接收缓冲区指针
-             .len = ARRAY_SIZE(tx),                    
-             .delay_usecs = delay,
-             .speed_hz = speed,
-             .bits_per_word = bits, 
-      };      
-      //进行一次读写操作
-      ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);//执行spidev.c中ioctl的default进行数据传输
-      if (ret == 1)
-             pabort(&quot;can&#39;t send spi message&quot;); 
-
-}
-/*******************************************************************
-* 名称：                sensor_read_register
-* 功能：                读取外挂设备指定寄存器的数据
-* 入口参数：         fd        SPI文件描述符 
-*                              addr     设备寄存器地址
-*                              rev   接收收到的数据
-*出口参数：          返回读取的数据长度
-*******************************************************************/  
-int sensor_read_register(int fd,unsigned int addr,uint8_t rev[])
-{
-
-      int ret;
-      //定义待发送的数据
-      uint8_t tx[5];
-      tx[0] = addr;     
-      int t;
-      int len;
-
-      uint8_t rx[ARRAY_SIZE(tx)] = {0}; 
-      struct spi_ioc_transfer tr = {
-
-             .tx_buf = (unsigned long)tx,   //定义发送缓冲区指针
-             .rx_buf = (unsigned long)rx,   //定义接收缓冲区指针
-             .len = ARRAY_SIZE(tx),                    
-             .delay_usecs = delay,
-             .speed_hz = speed,
-             .bits_per_word = bits, 
-      };      
-      //进行一次读写操作
-      ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);//执行spidev.c中ioctl的default进行数据传输
-      if (ret == 1)
-             pabort(&quot;can&#39;t send spi message&quot;);
-      for(ret=0; ret&lt;ARRAY_SIZE(rx);ret++)
-      {
-            rev[ret] = rx[ret];
-      }
-      return len = ARRAY_SIZE(rx);
-}
-/*******************************************************************
-* 名称：                Spi_Set
-* 功能：                配置spi总线的参数
-* 入口参数：         fd        SPI文件描述符 
-*                              addr     设备寄存器地址
-*                              rev   接收收到的数据
-*出口参数：          正确返回大于0 错误返回小于0
-*******************************************************************/  
-int Spi_Set(int fd)
-{
-      int ret = -1;
-      mode |= SPI_CPHA;//时钟相位
-      mode |= SPI_CPOL;//时钟继续  
-      mode &amp;= ~SPI_CS_HIGH;  //片选高电平
-      ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);  //SPI模式设置可写
-
-      if (ret == -1)
-
-             pabort(&quot;can&#39;t set spi mode&quot;);
-      ret = ioctl(fd, SPI_IOC_RD_MODE, &amp;mode); //SPI模式设置可读
-
-      if (ret == -1)
-             pabort(&quot;can&#39;t get spi mode&quot;);
-
-      ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &amp;bits);  //SPI的bit/word设置可写
-
-      if (ret == -1)
-
-             pabort(&quot;can&#39;t set bits per word&quot;);
-
-      ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &amp;bits);   //SPI的bit/word设置可读
-
-      if (ret == -1)
-
-             pabort(&quot;can&#39;t get bits per word&quot;);
-
-      ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &amp;speed);     //SPI的波特率设置可写
-
-      if (ret == -1)
-
-             pabort(&quot;can&#39;t set max speed hz&quot;);
-
-      ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &amp;speed);   //SPI的波特率设置可读
-
-      if (ret == -1)
-
-             pabort(&quot;can&#39;t get max speed hz&quot;);
-
-      printf(&quot;spi mode: %d\n&quot;, mode);
-
-      printf(&quot;bits per word: %d\n&quot;, bits);
-      printf(&quot;max speed: %d Hz (%d KHz)\n&quot;, speed, speed/1000);
-      return ret;
-}
-/*******************************************************************
-* 名称：                Twe_Addr
-* 功能：                计算第二通道的偏移量
-* 入口参数：        addr     设备寄存器的偏移基地址
-*出口参数：          返回偏移后的地址
-*******************************************************************/ 
-unsigned int Twe_Addr(unsigned int addr)
-{
-      int new_addr = addr + 0x20;
-}
-/*******************************************************************
-* 名称：                Math_Acceleration
-* 功能：                计算云台的实际加速度
-* 入口参数：        Accel     
-*出口参数：          无
-*******************************************************************/
-void Math_Acceleration(unsigned int Accel)
-{
-      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
-      double Acceleration = 0.775*Accel;
-      printf(&quot;Acceleration:%02lf\n&quot;, Acceleration);
-}
-/*******************************************************************
-* 名称：                Tmc_Init
-* 功能：                初始化TMC5041的寄存器参数
-* 入口参数：         fd        SPI文件描述符    
-*出口参数：          无
-*******************************************************************/
-void Tmc_Init(int fd)
-{
-      //第一组初始化
-      sensor_write_register(fd,GCONF,0x00000008);  // GCONF=8: Enable Position compare pulse and INT outputs                                                      
-      sensor_write_register(fd,CHOPCONF,0x000100C5);  // CHOPCONF: TOFF=5, HSTRT=4, HEND=1, TBL=2, CHM=0 (spreadCycle)                                                      
-      sensor_write_register(fd,IHOLD_IRUN,0x00011F05);  // IHOLD_IRUN: IHOLD=5, IRUN=31 (max. current), IHOLDDELAY=1000（静止电流为5，检测电阻，控制掉电后的周期）                                                   
-      sensor_write_register(fd,TZEROWAIT,0x00002710);  // TZEROWAIT=10000  DECE后的wait时间 （下降到零速度或反向旋转的等待时间）                                                   
-      sensor_write_register(fd,PWMCONF,0x000401C8);  // PWM_CONF: AUTO=1, 1/1024 Fclk, Switch amplitude limit=200, Grad=1 
-      sensor_write_register(fd,VHIGH,0x00061A80);  // VHIGH=400 000: Set VHIGH to a high value to allow stealthChop                                                      
-      sensor_write_register(fd,VCOOLTHRS,0x00007530);  // VCOOLTHRS=30000: Set upper limit for stealthChop to about 30RPM 
-      sensor_write_register(fd,VSTART,0X00000005);//  VSTART = 1
-      sensor_write_register(fd,VSTOP,0X0000000A); // VSTOP = 10 Stop velocity (Near to zero)
-      //第二组通道初始化
-      sensor_write_register(fd,(CHOPCONF+0x10),0x000100C5);  // CHOPCONF: TOFF=5, HSTRT=4, HEND=1, TBL=2, CHM=0 (spreadCycle)
-      sensor_write_register(fd,PWMCONF+0x08,0x000401C8);  // PWM_CONF: AUTO=1, 1/1024 Fclk, Switch amplitude limit=200, Grad=1  
-      sensor_write_register(fd,Twe_Addr(IHOLD_IRUN),0x00011F05);  // IHOLD_IRUN: IHOLD=5, IRUN=31 (max. current), IHOLDDELAY=1000 
-      sensor_write_register(fd,Twe_Addr(TZEROWAIT),0x00002710);  // TZEROWAIT=10000  DECE后的wait时间  
-      sensor_write_register(fd,Twe_Addr(VHIGH),0x00061A80);  // VHIGH=400 000: Set VHIGH to a high value to allow stealthChop  
-      sensor_write_register(fd,Twe_Addr(VCOOLTHRS),0x00007530);  // VCOOLTHRS=30000: Set upper limit for stealthChop to about 30RPM  
-      sensor_write_register(fd,Twe_Addr(VSTART),0X00000005);//  VSTART = 1
-      sensor_write_register(fd,Twe_Addr(VSTOP),0X0000000A); // VSTOP = 10 Stop velocity (Near to zero)                         
-
-}
-/*******************************************************************
-* 名称：                Curr_Pos
-* 功能：                初始化TMC5041的寄存器参数
-* 入口参数：         fd        SPI文件描述符 
-*                     rev          保存位置的信息   
-*出口参数：          无
-*******************************************************************/
-void Curr_Pos(int fd,uint8_t rev[])
-{
-      int i =0;
-      int len_rl = sensor_read_register(fd,XACTUAL,rev);
-
-      for(i=0;i&lt;len_rl;i++)
-      {
-            if(i==0)
-            printf(&quot;RL\n&quot;);
-            printf(&quot;%02x &quot;,rev[i]);
-      }
-      int len_ud = sensor_read_register(fd,Twe_Addr(XACTUAL),rev);
-      for(i=0;i&lt;len_ud;i++)
-      {
-            if(i==0)
-            printf(&quot;UD\n&quot;);
-            printf(&quot;%02x &quot;,rev[i]);
-      }
-}
-/*******************************************************************
-* 名称：                Motion_Left
-* 功能：                给定一定速度来驱动电机左转
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Left(int fd)
-{
-      //将v1和vmax设为一样的 
-      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
-      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
-      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
-      //正向旋转
-      sensor_write_register(fd,RAMPMODE,0x00000001);  // RAMPMODE=1 (positive velocity) 
-      Math_Acceleration(200);
-
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_Right
-* 功能：                给定一定速度来驱动电机右转
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Right(int fd)
-{    
-      //将v1和vmax设为一样的 
-      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
-      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
-      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
-      //反向旋转
-      sensor_write_register(fd,RAMPMODE,0x00000002);  // RAMPMODE=1 (negative velocity)
-      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
-      Math_Acceleration(200);
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_Up
-* 功能：                给定一定速度来驱动电机向上转
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Up(int fd)
-{     
-        //将v1和vmax设为一样的 
-      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
-        sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
-      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
-      //正向旋转
-      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000001);  // RAMPMODE=1 (negative velocity) 
-      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
-      Math_Acceleration(200);
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_Down
-* 功能：                给定一定速度来驱动电机向下转
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Down(int fd)
-{     
-
-      //将v1和vmax设为一样的 
-      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
-      sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
-      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
-      //反向旋转
-      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000002);  // RAMPMODE=1 (negative velocity) 
-      Math_Acceleration(200);
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_Stop_RL
-* 功能：                控制左右电机停止
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Stop_RL(int fd)
-{     
-      sensor_write_register(fd,V1,0X00000000); // V1 = 50 000 Acceleration threshold velocity V1
-      sensor_write_register(fd,VMAX,0X00000000); // VMAX = 50 000                                                
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_Stop_UD
-* 功能：                控制上下电机停止
-* 入口参数：         fd        SPI文件描述符   
-*出口参数：          0
-*******************************************************************/
-int Motion_Stop_UD(int fd)
-{     
-      sensor_write_register(fd,Twe_Addr(V1),0X00000000); // V1 = 50 000 Acceleration threshold velocity V1
-      sensor_write_register(fd,Twe_Addr(VMAX),0X00000000); // VMAX = 50 000                                                
-      return 0;
-}
-/*******************************************************************
-* 名称：                Motion_MovPos
-* 功能：                控制上下电机停止
-* 入口参数：         fd        SPI文件描述符 
-*                     Position_UD 给定需要指定的上下位置
-*                     Position_RL 给定需要指定的左右位置
-*出口参数：          0
-*******************************************************************/
-void Motion_MovPos(int fd, unsigned int Position_UD, unsigned int Position_RL)
-{
-      //设置左右方向的参数
-      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
-      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
-      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
-      sensor_write_register(fd,RAMPMODE,0x00000000);  // RAMPMODE=1 (positive velocity) 
-       //设置上下方向的参数
-      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
-      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
-      sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
-      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
-      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
-      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
-      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000000);  // RAMPMODE=1 (negative velocity)
-
-      //选择上下左右的位置
-      sensor_write_register(fd,Twe_Addr(XTARGET),Position_UD);
-      sensor_write_register(fd,Twe_Addr(XTARGET),Position_RL);  
-}
-
-int main(int argc, char *argv[])
-
-{
-      int exit=0;
-      int ret = -1;
-      int fd;
-      uint8_t rev[50];
-
-      fd = open(device, O_RDWR);       //打开&quot;/dev/spidev1.0&quot;
-      if (fd &lt; 0)
-             pabort(&quot;can&#39;t open device&quot;);
-      ret = Spi_Set(fd);
-      if(ret &lt; 0)
-      {
-            printf(&quot;spi set error\n&quot;);
-      }
-      Tmc_Init(fd);
-        while (!exit)
-        {
-             int ch = getchar();
-             switch(ch)
-             {
-             case &#39;h&#39;:
-                  Motion_Right(fd);
-                  sleep(1);
-                  Motion_Left(fd);
-                  sleep(1);
-                  Motion_Up(fd);
-                  sleep(1);
-                  Motion_Down(fd);
-                  sleep(1);
-                  //回到指定位置
-                  Motion_MovPos(fd,0Xfffff155,0X00000000);
-                  break;
-             case &#39;s&#39;:
-                  printf(&quot;----------Motion_Stop_RL--------\n&quot;);
-                  Motion_Stop_RL(fd);
-                  break;
-             case &#39;a&#39;:
-                  printf(&quot;----------Motion_Stop_UD--------\n&quot;);
-                  Motion_Stop_UD(fd);
-                  break;
-             case &#39;r&#39;:
-                  printf(&quot;---------Motion_Right-----------\n&quot;);
-                  Motion_Right(fd);
-                  break;
-             case &#39;l&#39;:
-                  printf(&quot;---------Motion_Left------------\n&quot;);
-                  Motion_Left(fd);
-                  break;
-             case &#39;u&#39;:
-                  printf(&quot;----------Motion_Up-------------\n&quot;);
-                  Motion_Up(fd);
-                  break;
-             case &#39;d&#39;:
-                  printf(&quot;----------Motion_Down-----------\n&quot;);
-                  Motion_Down(fd);
-                  break;
-             case &#39;p&#39;:
-                  Curr_Pos(fd,rev);
-             default:
-                  break;
-             }
-        }      
-
-
-      close(fd);
-      return ret;
-
-}
-</code></pre>
-
-        
-    </article>
-    <footer class="cube-excerpt-footer">
-        <a class="cube-excerpt-more" href="/2020/06/05/text3/">阅读全文</a>
-    </footer>
-</div>
-
 <div class="cube-excerpt" id="cube-excerpt-基于海思HI3519V101-串口应用编程">
     <header class="cube-excerpt-header">
         <h1><a href="/2020/06/05/text4/">基于海思HI3519V101-串口应用编程</a></h1>
@@ -1156,6 +648,499 @@ end:
     </footer>
 </div>
 
+<div class="cube-excerpt" id="cube-excerpt-基于海思HI3519V101—SPI应用编程驱动TMC5041">
+    <header class="cube-excerpt-header">
+        <h1><a href="/2020/06/05/text3/">基于海思HI3519V101—SPI应用编程驱动TMC5041</a></h1>
+        <div class="cube-excerpt-header-msg">
+            <div class="cube-excerpt-date">
+                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+                2020-06-05
+            </div>
+            <div class="cube-excerpt-tags">
+                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+                
+                <a href="/tags/%E6%B5%B7%E6%80%9D%E5%BC%80%E5%8F%91/" class="cube-excerpt-tag-link">#海思开发</a>
+                
+            </div>
+        </div>
+    </header>
+    <article class="cube-excerpt-entry cube-markdown">
+        
+        
+           <pre><code class="cpp">配合笔记参考http://note.youdao.com/noteshare?id=4d918ff95b075f08eb49aa081287d90f
+#include &lt;stdint.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;getopt.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;sys/ioctl.h&gt;
+#include &lt;linux/types.h&gt;
+#include &lt;linux/spi/spidev.h&gt;
+#include&lt;stdlib.h&gt;
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+
+static void pabort(const char *s)
+{
+      perror(s);
+      abort();
+
+}
+
+static const char *device = &quot;/dev/spidev1.0&quot;; //设备名
+static uint8_t mode;    //设备模式
+static uint8_t bits = 8;
+static uint32_t speed = 500000;
+static uint16_t delay;
+//对TMC寄存器的宏定义
+unsigned int GCONF = 0x00;                                    
+unsigned int CHOPCONF = 0x6c;                                 
+unsigned int IHOLD_IRUN = 0x30;                               
+unsigned int TZEROWAIT = 0x2c;                               
+unsigned int PWMCONF = 0x10;
+unsigned int VHIGH = 0x32;
+unsigned int VCOOLTHRS = 0x31;
+unsigned int RAMPMODE = 0x20;
+//速度参数寄存器
+unsigned int VSTART = 0x23;
+unsigned int A1 = 0x24;
+unsigned int V1 = 0x25;
+unsigned int AMAX = 0x26;
+unsigned int VMAX = 0x27;
+unsigned int DMAX = 0x28;
+unsigned int D1 = 0x2A;
+unsigned int VSTOP = 0x2B;
+
+//当前速度寄存器
+unsigned int VACTUAL = 0x22;
+//当前位置寄存器
+unsigned int XACTUAL = 0x21;
+//给定位置寄存器
+unsigned int XTARGET = 0x2D;
+/*******************************************************************
+* 名称：                sensor_write_register
+* 功能：                将信息通过SPI写入外挂设备的指定寄存器的信息
+* 入口参数：         fd        SPI文件描述符 
+*                              addr     设备寄存器地址
+*                              data   写入的数据
+*出口参数：          无
+*******************************************************************/  
+static void sensor_write_register(int fd,unsigned int addr, unsigned int data) 
+{
+
+      int ret;
+      //定义待发送的数据
+      uint8_t tx[5];
+      tx[0] = 0X80 | addr &amp; 0xff;
+      tx[1] = 0xff &amp; (data &gt;&gt; 24) ;
+      tx[2] = 0xff &amp; (data &gt;&gt; 16) ;
+      tx[3] = 0xff &amp; (data &gt;&gt; 8) ;
+      tx[4] = 0xff &amp; (data &gt;&gt; 0) ;
+
+      uint8_t rx[ARRAY_SIZE(tx)] = {0};
+      struct spi_ioc_transfer tr = {
+
+             .tx_buf = (unsigned long)tx,   //定义发送缓冲区指针
+             .rx_buf = (unsigned long)rx,   //定义接收缓冲区指针
+             .len = ARRAY_SIZE(tx),                    
+             .delay_usecs = delay,
+             .speed_hz = speed,
+             .bits_per_word = bits, 
+      };      
+      //进行一次读写操作
+      ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);//执行spidev.c中ioctl的default进行数据传输
+      if (ret == 1)
+             pabort(&quot;can&#39;t send spi message&quot;); 
+
+}
+/*******************************************************************
+* 名称：                sensor_read_register
+* 功能：                读取外挂设备指定寄存器的数据
+* 入口参数：         fd        SPI文件描述符 
+*                              addr     设备寄存器地址
+*                              rev   接收收到的数据
+*出口参数：          返回读取的数据长度
+*******************************************************************/  
+int sensor_read_register(int fd,unsigned int addr,uint8_t rev[])
+{
+
+      int ret;
+      //定义待发送的数据
+      uint8_t tx[5];
+      tx[0] = addr;     
+      int t;
+      int len;
+
+      uint8_t rx[ARRAY_SIZE(tx)] = {0}; 
+      struct spi_ioc_transfer tr = {
+
+             .tx_buf = (unsigned long)tx,   //定义发送缓冲区指针
+             .rx_buf = (unsigned long)rx,   //定义接收缓冲区指针
+             .len = ARRAY_SIZE(tx),                    
+             .delay_usecs = delay,
+             .speed_hz = speed,
+             .bits_per_word = bits, 
+      };      
+      //进行一次读写操作
+      ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);//执行spidev.c中ioctl的default进行数据传输
+      if (ret == 1)
+             pabort(&quot;can&#39;t send spi message&quot;);
+      for(ret=0; ret&lt;ARRAY_SIZE(rx);ret++)
+      {
+            rev[ret] = rx[ret];
+      }
+      return len = ARRAY_SIZE(rx);
+}
+/*******************************************************************
+* 名称：                Spi_Set
+* 功能：                配置spi总线的参数
+* 入口参数：         fd        SPI文件描述符 
+*                              addr     设备寄存器地址
+*                              rev   接收收到的数据
+*出口参数：          正确返回大于0 错误返回小于0
+*******************************************************************/  
+int Spi_Set(int fd)
+{
+      int ret = -1;
+      mode |= SPI_CPHA;//时钟相位
+      mode |= SPI_CPOL;//时钟继续  
+      mode &amp;= ~SPI_CS_HIGH;  //片选高电平
+      ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);  //SPI模式设置可写
+
+      if (ret == -1)
+
+             pabort(&quot;can&#39;t set spi mode&quot;);
+      ret = ioctl(fd, SPI_IOC_RD_MODE, &amp;mode); //SPI模式设置可读
+
+      if (ret == -1)
+             pabort(&quot;can&#39;t get spi mode&quot;);
+
+      ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &amp;bits);  //SPI的bit/word设置可写
+
+      if (ret == -1)
+
+             pabort(&quot;can&#39;t set bits per word&quot;);
+
+      ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &amp;bits);   //SPI的bit/word设置可读
+
+      if (ret == -1)
+
+             pabort(&quot;can&#39;t get bits per word&quot;);
+
+      ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &amp;speed);     //SPI的波特率设置可写
+
+      if (ret == -1)
+
+             pabort(&quot;can&#39;t set max speed hz&quot;);
+
+      ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &amp;speed);   //SPI的波特率设置可读
+
+      if (ret == -1)
+
+             pabort(&quot;can&#39;t get max speed hz&quot;);
+
+      printf(&quot;spi mode: %d\n&quot;, mode);
+
+      printf(&quot;bits per word: %d\n&quot;, bits);
+      printf(&quot;max speed: %d Hz (%d KHz)\n&quot;, speed, speed/1000);
+      return ret;
+}
+/*******************************************************************
+* 名称：                Twe_Addr
+* 功能：                计算第二通道的偏移量
+* 入口参数：        addr     设备寄存器的偏移基地址
+*出口参数：          返回偏移后的地址
+*******************************************************************/ 
+unsigned int Twe_Addr(unsigned int addr)
+{
+      int new_addr = addr + 0x20;
+}
+/*******************************************************************
+* 名称：                Math_Acceleration
+* 功能：                计算云台的实际加速度
+* 入口参数：        Accel     
+*出口参数：          无
+*******************************************************************/
+void Math_Acceleration(unsigned int Accel)
+{
+      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
+      double Acceleration = 0.775*Accel;
+      printf(&quot;Acceleration:%02lf\n&quot;, Acceleration);
+}
+/*******************************************************************
+* 名称：                Tmc_Init
+* 功能：                初始化TMC5041的寄存器参数
+* 入口参数：         fd        SPI文件描述符    
+*出口参数：          无
+*******************************************************************/
+void Tmc_Init(int fd)
+{
+      //第一组初始化
+      sensor_write_register(fd,GCONF,0x00000008);  // GCONF=8: Enable Position compare pulse and INT outputs                                                      
+      sensor_write_register(fd,CHOPCONF,0x000100C5);  // CHOPCONF: TOFF=5, HSTRT=4, HEND=1, TBL=2, CHM=0 (spreadCycle)                                                      
+      sensor_write_register(fd,IHOLD_IRUN,0x00011F05);  // IHOLD_IRUN: IHOLD=5, IRUN=31 (max. current), IHOLDDELAY=1000（静止电流为5，检测电阻，控制掉电后的周期）                                                   
+      sensor_write_register(fd,TZEROWAIT,0x00002710);  // TZEROWAIT=10000  DECE后的wait时间 （下降到零速度或反向旋转的等待时间）                                                   
+      sensor_write_register(fd,PWMCONF,0x000401C8);  // PWM_CONF: AUTO=1, 1/1024 Fclk, Switch amplitude limit=200, Grad=1 
+      sensor_write_register(fd,VHIGH,0x00061A80);  // VHIGH=400 000: Set VHIGH to a high value to allow stealthChop                                                      
+      sensor_write_register(fd,VCOOLTHRS,0x00007530);  // VCOOLTHRS=30000: Set upper limit for stealthChop to about 30RPM 
+      sensor_write_register(fd,VSTART,0X00000005);//  VSTART = 1
+      sensor_write_register(fd,VSTOP,0X0000000A); // VSTOP = 10 Stop velocity (Near to zero)
+      //第二组通道初始化
+      sensor_write_register(fd,(CHOPCONF+0x10),0x000100C5);  // CHOPCONF: TOFF=5, HSTRT=4, HEND=1, TBL=2, CHM=0 (spreadCycle)
+      sensor_write_register(fd,PWMCONF+0x08,0x000401C8);  // PWM_CONF: AUTO=1, 1/1024 Fclk, Switch amplitude limit=200, Grad=1  
+      sensor_write_register(fd,Twe_Addr(IHOLD_IRUN),0x00011F05);  // IHOLD_IRUN: IHOLD=5, IRUN=31 (max. current), IHOLDDELAY=1000 
+      sensor_write_register(fd,Twe_Addr(TZEROWAIT),0x00002710);  // TZEROWAIT=10000  DECE后的wait时间  
+      sensor_write_register(fd,Twe_Addr(VHIGH),0x00061A80);  // VHIGH=400 000: Set VHIGH to a high value to allow stealthChop  
+      sensor_write_register(fd,Twe_Addr(VCOOLTHRS),0x00007530);  // VCOOLTHRS=30000: Set upper limit for stealthChop to about 30RPM  
+      sensor_write_register(fd,Twe_Addr(VSTART),0X00000005);//  VSTART = 1
+      sensor_write_register(fd,Twe_Addr(VSTOP),0X0000000A); // VSTOP = 10 Stop velocity (Near to zero)                         
+
+}
+/*******************************************************************
+* 名称：                Curr_Pos
+* 功能：                初始化TMC5041的寄存器参数
+* 入口参数：         fd        SPI文件描述符 
+*                     rev          保存位置的信息   
+*出口参数：          无
+*******************************************************************/
+void Curr_Pos(int fd,uint8_t rev[])
+{
+      int i =0;
+      int len_rl = sensor_read_register(fd,XACTUAL,rev);
+
+      for(i=0;i&lt;len_rl;i++)
+      {
+            if(i==0)
+            printf(&quot;RL\n&quot;);
+            printf(&quot;%02x &quot;,rev[i]);
+      }
+      int len_ud = sensor_read_register(fd,Twe_Addr(XACTUAL),rev);
+      for(i=0;i&lt;len_ud;i++)
+      {
+            if(i==0)
+            printf(&quot;UD\n&quot;);
+            printf(&quot;%02x &quot;,rev[i]);
+      }
+}
+/*******************************************************************
+* 名称：                Motion_Left
+* 功能：                给定一定速度来驱动电机左转
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Left(int fd)
+{
+      //将v1和vmax设为一样的 
+      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
+      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
+      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
+      //正向旋转
+      sensor_write_register(fd,RAMPMODE,0x00000001);  // RAMPMODE=1 (positive velocity) 
+      Math_Acceleration(200);
+
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_Right
+* 功能：                给定一定速度来驱动电机右转
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Right(int fd)
+{    
+      //将v1和vmax设为一样的 
+      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
+      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
+      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
+      //反向旋转
+      sensor_write_register(fd,RAMPMODE,0x00000002);  // RAMPMODE=1 (negative velocity)
+      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
+      Math_Acceleration(200);
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_Up
+* 功能：                给定一定速度来驱动电机向上转
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Up(int fd)
+{     
+        //将v1和vmax设为一样的 
+      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
+        sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
+      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
+      //正向旋转
+      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000001);  // RAMPMODE=1 (negative velocity) 
+      //计算实际加速度(Acceleration_Speed = 12.4*2^-4*寄存器的值 = 0.775*10000)
+      Math_Acceleration(200);
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_Down
+* 功能：                给定一定速度来驱动电机向下转
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Down(int fd)
+{     
+
+      //将v1和vmax设为一样的 
+      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
+      sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
+      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
+      //反向旋转
+      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000002);  // RAMPMODE=1 (negative velocity) 
+      Math_Acceleration(200);
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_Stop_RL
+* 功能：                控制左右电机停止
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Stop_RL(int fd)
+{     
+      sensor_write_register(fd,V1,0X00000000); // V1 = 50 000 Acceleration threshold velocity V1
+      sensor_write_register(fd,VMAX,0X00000000); // VMAX = 50 000                                                
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_Stop_UD
+* 功能：                控制上下电机停止
+* 入口参数：         fd        SPI文件描述符   
+*出口参数：          0
+*******************************************************************/
+int Motion_Stop_UD(int fd)
+{     
+      sensor_write_register(fd,Twe_Addr(V1),0X00000000); // V1 = 50 000 Acceleration threshold velocity V1
+      sensor_write_register(fd,Twe_Addr(VMAX),0X00000000); // VMAX = 50 000                                                
+      return 0;
+}
+/*******************************************************************
+* 名称：                Motion_MovPos
+* 功能：                控制上下电机停止
+* 入口参数：         fd        SPI文件描述符 
+*                     Position_UD 给定需要指定的上下位置
+*                     Position_RL 给定需要指定的左右位置
+*出口参数：          0
+*******************************************************************/
+void Motion_MovPos(int fd, unsigned int Position_UD, unsigned int Position_RL)
+{
+      //设置左右方向的参数
+      sensor_write_register(fd,V1,0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,VMAX,0X00003A98); // VMAX = 100 00 
+      sensor_write_register(fd,A1,0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,AMAX,0X000000C8); // AMAX = 200
+      sensor_write_register(fd,D1,0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,DMAX,0X000003E8); // DMAX = 1000  
+      sensor_write_register(fd,RAMPMODE,0x00000000);  // RAMPMODE=1 (positive velocity) 
+       //设置上下方向的参数
+      sensor_write_register(fd,Twe_Addr(V1),0X00003A98); // V1 = 100 00 Acceleration threshold velocity V1
+      sensor_write_register(fd,Twe_Addr(VMAX),0X00003A98); // VMAX = 100 00 
+      sensor_write_register(fd,Twe_Addr(A1),0X000000C8); // // A1 = 200   
+      sensor_write_register(fd,Twe_Addr(AMAX),0X000000C8); // AMAX = 200
+      sensor_write_register(fd,Twe_Addr(D1),0X000003E8); // D1 = 1000  
+      sensor_write_register(fd,Twe_Addr(DMAX),0X000003E8); // DMAX = 1000  
+      sensor_write_register(fd,Twe_Addr(RAMPMODE),0x00000000);  // RAMPMODE=1 (negative velocity)
+
+      //选择上下左右的位置
+      sensor_write_register(fd,Twe_Addr(XTARGET),Position_UD);
+      sensor_write_register(fd,Twe_Addr(XTARGET),Position_RL);  
+}
+
+int main(int argc, char *argv[])
+
+{
+      int exit=0;
+      int ret = -1;
+      int fd;
+      uint8_t rev[50];
+
+      fd = open(device, O_RDWR);       //打开&quot;/dev/spidev1.0&quot;
+      if (fd &lt; 0)
+             pabort(&quot;can&#39;t open device&quot;);
+      ret = Spi_Set(fd);
+      if(ret &lt; 0)
+      {
+            printf(&quot;spi set error\n&quot;);
+      }
+      Tmc_Init(fd);
+        while (!exit)
+        {
+             int ch = getchar();
+             switch(ch)
+             {
+             case &#39;h&#39;:
+                  Motion_Right(fd);
+                  sleep(1);
+                  Motion_Left(fd);
+                  sleep(1);
+                  Motion_Up(fd);
+                  sleep(1);
+                  Motion_Down(fd);
+                  sleep(1);
+                  //回到指定位置
+                  Motion_MovPos(fd,0Xfffff155,0X00000000);
+                  break;
+             case &#39;s&#39;:
+                  printf(&quot;----------Motion_Stop_RL--------\n&quot;);
+                  Motion_Stop_RL(fd);
+                  break;
+             case &#39;a&#39;:
+                  printf(&quot;----------Motion_Stop_UD--------\n&quot;);
+                  Motion_Stop_UD(fd);
+                  break;
+             case &#39;r&#39;:
+                  printf(&quot;---------Motion_Right-----------\n&quot;);
+                  Motion_Right(fd);
+                  break;
+             case &#39;l&#39;:
+                  printf(&quot;---------Motion_Left------------\n&quot;);
+                  Motion_Left(fd);
+                  break;
+             case &#39;u&#39;:
+                  printf(&quot;----------Motion_Up-------------\n&quot;);
+                  Motion_Up(fd);
+                  break;
+             case &#39;d&#39;:
+                  printf(&quot;----------Motion_Down-----------\n&quot;);
+                  Motion_Down(fd);
+                  break;
+             case &#39;p&#39;:
+                  Curr_Pos(fd,rev);
+             default:
+                  break;
+             }
+        }      
+
+
+      close(fd);
+      return ret;
+
+}
+</code></pre>
+
+        
+    </article>
+    <footer class="cube-excerpt-footer">
+        <a class="cube-excerpt-more" href="/2020/06/05/text3/">阅读全文</a>
+    </footer>
+</div>
+
 <div class="cube-excerpt" id="cube-excerpt-P2045涂格子（fib）">
     <header class="cube-excerpt-header">
         <h1><a href="/2020/06/05/text2/">P2045涂格子（fib）</a></h1>
@@ -1419,7 +1404,7 @@ int main(){
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2020/06/05/text3/" title="基于海思HI3519V101—SPI应用编程驱动TMC5041">基于海思HI3519V101—SPI应用编程驱动TMC5041</a>
+                    <a href="/2020/06/05/text4/" title="基于海思HI3519V101-串口应用编程">基于海思HI3519V101-串口应用编程</a>
                 </p>
             </div>
             
@@ -1433,7 +1418,7 @@ int main(){
                     <span>2</span>
                 </p>
                 <p class="title">
-                    <a href="/2020/06/05/text4/" title="基于海思HI3519V101-串口应用编程">基于海思HI3519V101-串口应用编程</a>
+                    <a href="/2020/06/05/text3/" title="基于海思HI3519V101—SPI应用编程驱动TMC5041">基于海思HI3519V101—SPI应用编程驱动TMC5041</a>
                 </p>
             </div>
         </li>
@@ -1495,7 +1480,7 @@ int main(){
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">#嵌入式</a>
         </div>
         
