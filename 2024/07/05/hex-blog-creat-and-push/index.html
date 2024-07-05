@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Archives | 欢迎来到我的世界</title>
+    <title> | 欢迎来到我的世界</title>
     <meta name="author" content="ranyue" />
     <meta name="description" content="condering the world" />
     <meta name="keywords" content="" />
@@ -37,6 +37,10 @@
 
 
 <script src="/js/lib/preview.js"></script>
+
+
+
+
 
 
 
@@ -150,40 +154,39 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            
-<div id="archives">
-    
-    <div id="timeline-wrap" ref="timeline">
+            <div class="article">
+    <div>
+        <h1></h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/7/5
+        </span>
         
-        <div class="timeline" data-title="">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2024/7/5</div>
-                <a href="/2024/07/05/usb/">
-                    <h3></h3>
-                </a>
-                <div class="info">
-                    
-                    
-                </div>
-            </div>
-        </div>
-        
-        <div class="timeline" data-title="">
-            <div class="timeline-tail"></div>
-            <div class="timeline-content">
-                <div class="item-time">2024/7/5</div>
-                <a href="/2024/07/05/hex-blog-creat-and-push/">
-                    <h3></h3>
-                </a>
-                <div class="info">
-                    
-                    
-                </div>
-            </div>
-        </div>
         
     </div>
+    
+    <div class="content" v-pre>
+        <h2 id="hex-blog-creat-and-push"><a href="#hex-blog-creat-and-push" class="headerlink" title="hex blog creat and push"></a>hex blog creat and push</h2><ol>
+<li>进入目录blog</li>
+<li>使用命令 <code>hexo new &quot;xxxx&quot;</code></li>
+<li>使用命令清除缓存 <code>hexo clean</code></li>
+<li>使用命令生成 <code>hexo g</code></li>
+<li>使用命令推送 <code>hexo d</code></li>
+</ol>
+<p>参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/2201_75288693/article/details/138519863">保姆级教学 基于Hexo搭建个人网站（Github）_github 网站-CSDN博客</a></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
 </div>
 
             <footer id="footer">
@@ -214,6 +217,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
