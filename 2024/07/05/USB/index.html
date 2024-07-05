@@ -170,7 +170,7 @@
     </div>
     
     <div class="content" v-pre>
-        <p>send</p>
+        <h2 id="USB使用模型设计"><a href="#USB使用模型设计" class="headerlink" title="USB使用模型设计"></a>USB使用模型设计</h2><p>send</p>
 <p>+———————-+<br>|   Open USB Device    |<br>|      (open)          |<br>+———-+———–+<br>           |<br>           v<br>    +—————+<br>    |   USB Reset   |<br>    |   (usb_reset) |<br>    +——-+——-+<br>            |<br>            v<br>    +—————+<br>    |  Get EP Max   |<br>    | (usb_get_epmax)|<br>    +——-+——-+<br>            |<br>            v<br>    +—————+<br>    | Check Endpoint |<br>    |   Validity    |<br>    +——-+——-+<br>            |<br>            v<br>     +——+———+<br>     | Set Timeout    |<br>     |    Loop        |<br>     +——+———+<br>            |<br>            v<br>      +—–+——–+<br>      | Wait TX Buf  |<br>      | (usb_wait_tx_buf)|<br>      +——+——–+<br>            |<br>     +——v——-+<br>     |   Timeout?   |<br>     +——+——-+<br>            |<br>     +——+——-+ (No)<br>     |    Yes       |<br>     |   Continue  &lt;-+<br>     +——+——-+<br>            |<br>            v<br>     +——+——-+<br>     |   Copy Data  |<br>     |   to Buffer  |<br>     +——+——-+<br>            |<br>            v<br>     +——+——-+<br>     | Submit TX Req|<br>     |(usb_submit_tx)|<br>     +——+——-+<br>            |<br>     +——+——-+ (Success?)<br>     |     Yes       |<br>     |     Loop      |<br>     +——+——-+<br>            |<br>     +——+——-+ (No)<br>     |   Failure     |<br>     |   Exit Loop   |<br>     +——+——-+<br>            |<br>            v<br>    +—————+<br>    |  Close Device |<br>    |     (close)    |<br>    +—————+</p>
 <p>rec</p>
 <ol>
