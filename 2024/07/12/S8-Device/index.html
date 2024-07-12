@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>S8-Device | 染玥的博客</title>
+    <meta name="author" content="ranyue" />
+    <meta name="description" content="condering the world" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>染玥的博客</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;Categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;Tags</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;染玥的博客</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>S8-Device</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/7/12
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h2 id="关于将S8驱动部分逻辑迁移到用户空间的分析"><a href="#关于将S8驱动部分逻辑迁移到用户空间的分析" class="headerlink" title="关于将S8驱动部分逻辑迁移到用户空间的分析"></a>关于将S8驱动部分逻辑迁移到用户空间的分析</h2><p>Linux内核开发有一个原则：内核提供机制，用户空间提供策略。也即内核应提供基础设施的访问机制，而业务逻辑应该留在用户空间解决。基于这一思想，内核提供的基础设施往往十分简陋，这对于通常的驱动和基础架构代码已经足够，但不足以支撑复杂的业务逻辑开发。S8驱动部分代码将应用层业务逻辑强行包含进核，给简单的业务逻辑带来了不必要的复杂性，降低了代码的可扩展和可维护性。本文档从功能和实现角度将S8驱动代码和底层资源做划分，找出适合移动到用户空间的部分，也为开发新功能做参考。</p>
+<p>（一）从IO资源角度分析：</p>
+<p>软件侧总共使用了以下IO资源：内存，中断，GPIO，LED，EERPOM，I2C，DAC，ADC，全局时钟，电源，PWM，USB。</p>
+<h4 id="1-从资源访问的方便性角度分析"><a href="#1-从资源访问的方便性角度分析" class="headerlink" title="(1)从资源访问的方便性角度分析"></a>(1)从资源访问的方便性角度分析</h4><ol>
+<li>内存可以在内核或者用户空间访问。这部分资源的划分原则就是如果涉及的功能必须在内核实现，比如要实现只有内核驱动支持的复杂协议（I2C等），就将其放在内核空间；而如果涉及的功能比较简单且独立，就将其放到用户空间用mmap实现。</li>
+<li>中断可以在内核通过中断子系统处理或者通过U10在用户空间处理。需要特别指出的是，上板的中断会通过中断聚合映射到SCM板的一条中断线上，因为这条线已经被GPIOController之类的内核基础设施占用，所以这个中断不会通过U10映射到用户空间；对于使用其他中断线的使用场景，可以转为在用户空间通过U10实现。</li>
+<li>GPIO的使用分为两部分，一部分是GPIOCONTROLLER驱动，这个作为基础设施必须留在内核，另一部分是对每个GPIO线的申请和使用，这个除非是给迁移后保留在内核的模块使用，其他一律改为在用户空间用libgpiod实现。</li>
+<li>LED由GPIO驱动，其中与业务操作无关的内核线程自动控制的LED仍然留在内核，而通过ioctl提供给用户层的LED可以移动到用户空间控制。</li>
+<li>I2C，DAC，ADC，USB，EEPROM和全局时钟都属于前面提到的实现了只有内核驱动支持的复杂协议，所以要保留在内核不做改变。</li>
+<li>电源指的是A7和USERFPGA的上下电管理功能，由于电源异常时需要SCM在几十毫秒之内响应，所以这些逻辑可以选择保留在内核里，或者单独实现为一个守护进程，开机常驻后台，SCMservic通过进程间通信控制守护进程（如果将SCMservic本身视为一个不会关闭的守护进程则不需要，这里考虑到了调试时SCMservic可能会被手动关闭的场景），又或者将上电机制移动到用户空间，而下电机制保留在线内核。</li>
+<li>PWM用于风扇控制需要一个后台常驻的执行流，可以是内核线程或者一个守护进程（如果将SCMservic本身视为一个不会关闭的守护进程则不需要额外的守护进程）。另外目前风扇转速由电源管理模块控制，所以这两个要一起考量。</li>
+</ol>
+<h4 id="2-S8驱动功能简介"><a href="#2-S8驱动功能简介" class="headerlink" title="(2)S8驱动功能简介"></a>(2)S8驱动功能简介</h4><ol>
+<li><p>master构建了一个struct cell_bottom结构代表SCM板，下挂很多个指针，每个指针由各种子模块初始化时填充，同时export一个全局接口使得所有模块都可以访问所有资源；master还提供大部分子模块的ioctl入口； 特殊的，这个cell_bottom结构还基于设备树用复杂的C代码维护了一套连接器名称，偏移以及连接器所使用电压挡位值的数组，这种复杂的字符串操作没有必要放在内核空间去做，但由于这个功能是连接器设置的基础，如果要迁移到用户空间的话，要十分小心的处理所有依赖。</p>
+</li>
+<li><p>Cell tree这个模块并不是一个常规的驱动，而是聚合了大量的模块与连接器相关操作的utility模块，其中一部分功能只是返回字符串，如top_get_port_voltage_name获取对应连接器电压挡位的名称，因为内核并不适合做类似的字符串操作，所以应该将这部分代码都移动到用户空间；另外涉及GPIO操作和从内核空间读取用户空间&#x2F;sys目录信息的部分也要移动到用户空间。</p>
+</li>
+<li><p>clk-connect-output通过GPIO操作时钟源输出，应该移动到用户空间</p>
+</li>
+<li><p>clock-mux通过GPIO操作18路时钟选择，应该移动到用户空间</p>
+</li>
+<li><p>clk-si570&#x2F;si5338时钟设备驱动，没有好的用户空间替代，保留在内核空间</p>
+</li>
+<li><p>TCA9548 Linux内核标准的I2C SWITCH驱动，不做改变</p>
+</li>
+<li><p>DAC基于I2C的DAC模块，保留在内核空间</p>
+</li>
+<li><p>ADC模块(MCP3422)基于I2C的Linux内核标准ADC驱动，不做改变</p>
+</li>
+<li><p>Daughter模块基于I2C的子卡EEPROM读写模块，保留在内核空间</p>
+</li>
+<li><p>FPGA模块基于内存映射实现bitstream配置，FPGA ID读取，FPGA时钟设置&#x2F;获取，LED灯的控制，FPGA上电后的初始化回调等。在内核中实现的bitstream配置代码十分复杂，不利于扩展和维护，应该移动到用户空间，这个功能的工作量比较大，可以放到后面做。其余的LED控制，FPGA信息读取和设置也可以移动到用户空间。</p>
+</li>
+<li><p>Freq-detector570频率检测模块，通过debugfs输出570信息，用于调试不开放给用户，不需要变动。</p>
+</li>
+<li><p>GPIO Controller模块GPIO controller驱动，提供基础的GPIO功能，保留在内核</p>
+</li>
+<li><p>S2C-I2C模块I2C设备驱动，提供基本的I2C功能，保留在内核</p>
+</li>
+<li><p>IRQ模块提供多路中断聚合功能，保留在内核里。</p>
+</li>
+<li><p>Keyboard模块按键检测模块，依赖GPIOController在中断聚合模块中注册的中断，可以将中断转发到用户空间去处理，可以迁移到用户空间。</p>
+</li>
+<li><p>LED模块总共有3个驱动，u-boot-led，ps-led，s2c-led，前两个是编译到内核开机过程中使用的，第3个是开机后加载并在系统运行过程中使用的，可以将s2c-led中只由用户空间控制的LED操作迁移到用户空间。</p>
+</li>
+<li><p>PWM模块用于风扇控制。为了保证用户进程关闭的情况下风扇仍然受控，保留在内核空间或者移动到一个守护进程中。</p>
+</li>
+<li><p>Firewall模块基于内存映射的A7进行上下电控制，这个模块应跟随上下电模块决定是否迁移。</p>
+</li>
+<li><p>pwr-mgr模块控制上板A7和USERFPGA的上下电，同时根据上电的stage和power控制每个板的风扇转速，保留在内核空间或者移动到一个守护进程中。</p>
+</li>
+<li><p>Pwr-s8模块控制每个上板的上下电，输出相应状态，是pwr-mgr的子模块。</p>
+</li>
+<li><p>Reset模块基于内存映射实现复位脉冲等功能，应该移动到用户空间</p>
+</li>
+<li><p>Ringbus模块基于内存映射实现ringbus功能。值得注意的是ringbus内核层用锁来防止多个执行流并行访问ringbus设备，如果将其移动到应用程序，则若能保证只有SCMservice访问ringbus就只需普通的mutex，若需要保证多进程能够访问ringbus就需要跨进程的同步机制保护。</p>
+</li>
+<li><p>UCD9000电压电流监控模块，相关信息输出到&#x2F;sys目录下，保留在内核</p>
+</li>
+<li><p>decrypt模块U-BOOT开机时将加密的厂商信息从FLASH拷贝到固定的物理地址，再由decrypt模块解密后供其他模块使用。这个功能涉及产品基础，有待讨论。</p>
+</li>
+<li><p>USB模块保留在内核</p>
+</li>
+<li><p>还有一些Linux内核标准的设备驱动未列出。</p>
+</li>
+</ol>
+<h4 id="3-关于debugfs的条目"><a href="#3-关于debugfs的条目" class="headerlink" title="(3)关于debugfs的条目"></a>(3)关于debugfs的条目</h4><p>S8驱动很多模块都将一部分信息导出到debugfs，使得用户可以在linux命令行读取和设置gpio，风扇，连接器电压和操作top板上下电等。这个功能在service和pprt之外提供了另一条访问资源的通道，但如果service和pprt能保证稳定运行的话，似乎本功能提供的冗余没有必要。可以先保留在内核中，之后开发或迁移某个模块时逐条检查该模块对应的debugfs，看是否需要，如需要则提供用户空间的替代或者保留debugfs条目，否则就删除。</p>
+<h4 id="（4）关于上电初始化回调"><a href="#（4）关于上电初始化回调" class="headerlink" title="（4）关于上电初始化回调"></a>（4）关于上电初始化回调</h4><p>上板上电时，先给a7上电，然后调用依赖a7核心模组的驱动模块注册的初始化回调，重新初始化对应模块，初始化和使能连接器，最后给USERFPGA上电。<br>如果上电机制保留在内核，则为了给被移动到用户空间的模块初始化的机会，可以分阶段先上电a7，再调用用户空间的初始化函数，接着初始化和使能连接器，最后给USERFPGA上电。目前被移动到用户空间且具有上电初始化回调的模块有FPGA模块，Ringbus模块。<br>如果上电机制被移动到用户空间，则为了给留在内核的驱动初始化的机会，也要分阶段上电，同时需要重新初始化的内核驱动提供ioctl选项供应用层调用。这种驱动目前有clk-si570，daughter，freq-detect，gpio controller，s2c-i2c,irq, ucd9000。</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 染玥的博客
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;ranyue
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>
