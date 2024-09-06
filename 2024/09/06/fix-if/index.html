@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>染玥的博客</title>
+    <title> | 染玥的博客</title>
     <meta name="author" content="ranyue" />
     <meta name="description" content="condering the world" />
     <meta name="keywords" content="" />
@@ -42,7 +42,9 @@
 
 
 
-<script src="/js/lib/home.js"></script>
+
+
+
 
 <link rel="stylesheet" href="/css/main.css" />
 
@@ -152,40 +154,11 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="home-head">
-    <div
-        id="home-background"
-        ref="homeBackground"
-        data-images="/images/background.jpg"
-    ></div>
-    <div id="home-info" @click="homeClick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>染玥的博客</h1>
-                <h3></h3>
-                <h5>condering the world</h5>
-            </div>
-        </span>
+            <div class="article">
+    <div>
+        <h1></h1>
     </div>
-</div>
-<div
-    id="home-posts-wrap"
-    ref="homePostsWrap"
-    true
->
-    <div id="home-posts">
-        
-
-<div class="post">
-    <a href="/2024/09/06/fix-if/">
-        <h2 class="post-title"></h2>
-    </a>
-    <div class="category-and-date">
-        
+    <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
@@ -195,10 +168,9 @@
         
         
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h3 id="如何减少或者改写代码中的if"><a href="#如何减少或者改写代码中的if" class="headerlink" title="如何减少或者改写代码中的if"></a>如何减少或者改写代码中的if</h3><h4 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h4><p><strong>映射表（Map&#x2F;Dictionary）</strong>：使用映射表来替代if语句。将条件和相应的操作映射到一个关联容器中，然后根据条件查找并执行相应的操作。</p>
+    
+    <div class="content" v-pre>
+        <h3 id="如何减少或者改写代码中的if"><a href="#如何减少或者改写代码中的if" class="headerlink" title="如何减少或者改写代码中的if"></a>如何减少或者改写代码中的if</h3><h4 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h4><p><strong>映射表（Map&#x2F;Dictionary）</strong>：使用映射表来替代if语句。将条件和相应的操作映射到一个关联容器中，然后根据条件查找并执行相应的操作。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Action1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Action 1&quot;</span> &lt;&lt; std::endl; &#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Action2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Action 2&quot;</span> &lt;&lt; std::endl; &#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Action3</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Action 3&quot;</span> &lt;&lt; std::endl; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::map&lt;<span class="type">int</span>, std::function&lt;<span class="type">void</span>()&gt;&gt; actionMap;</span><br><span class="line">    actionMap[<span class="number">1</span>] = Action1;</span><br><span class="line">    actionMap[<span class="number">2</span>] = Action2;</span><br><span class="line">    actionMap[<span class="number">3</span>] = Action3;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> condition = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (actionMap.<span class="built_in">find</span>(condition) != actionMap.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        actionMap[condition]();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Condition not found&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h4 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h4><p><strong>表驱动编程（Table-Driven Programming）</strong>：将条件和操作的关联数据结构化存储，然后使用查找表来执行操作，而不是使用if语句。</p>
@@ -297,331 +269,13 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sml.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> sml = boost::sml;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define states</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">created</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">paid</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">delivering</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">received</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">done</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define events</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">pay</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">deliver</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">receive</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">confirm</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Define a state machine</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">order_process</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">auto</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">namespace</span> sml;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">make_transition_table</span>(</span><br><span class="line">            *state&lt;created&gt; + event&lt;pay&gt; = state&lt;paid&gt;,</span><br><span class="line">            state&lt;paid&gt; + event&lt;deliver&gt; = state&lt;delivering&gt;,</span><br><span class="line">            state&lt;delivering&gt; + event&lt;receive&gt; = state&lt;received&gt;,</span><br><span class="line">            state&lt;received&gt; + event&lt;confirm&gt; = state&lt;done&gt;,</span><br><span class="line">            </span><br><span class="line">            on_entry&lt;delivering&gt; / [](<span class="type">const</span> <span class="keyword">auto</span>&amp;) &#123; </span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Entering &#x27;delivering&#x27; state&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            &#125;,</span><br><span class="line">            </span><br><span class="line">            on_exit&lt;delivering&gt; / [] &#123; </span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Exiting &#x27;delivering&#x27; state&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            &#125;,</span><br><span class="line">            </span><br><span class="line">            on&lt;pay&gt; / [](<span class="type">const</span> <span class="keyword">auto</span>&amp;) &#123; </span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Payment callback: Payment received&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            &#125;,</span><br><span class="line">            </span><br><span class="line">            on&lt;receive&gt; / [](<span class="type">const</span> <span class="keyword">auto</span>&amp;) &#123; </span><br><span class="line">                std::cout &lt;&lt; <span class="string">&quot;Receive callback: Order received&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sml::sm&lt;order_process&gt; sm;</span><br><span class="line"></span><br><span class="line">    sm.<span class="built_in">process_event</span>(pay&#123;&#125;);</span><br><span class="line">    sm.<span class="built_in">process_event</span>(deliver&#123;&#125;);</span><br><span class="line">    sm.<span class="built_in">process_event</span>(receive&#123;&#125;);</span><br><span class="line">    sm.<span class="built_in">process_event</span>(confirm&#123;&#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-            
-        </div>
     </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    <a href="/2024/09/06/fix-if/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/07/12/S8-Device/">
-        <h2 class="post-title">S8-Device</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/7/12
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h2 id="关于将S8驱动部分逻辑迁移到用户空间的分析"><a href="#关于将S8驱动部分逻辑迁移到用户空间的分析" class="headerlink" title="关于将S8驱动部分逻辑迁移到用户空间的分析"></a>关于将S8驱动部分逻辑迁移到用户空间的分析</h2><p>Linux内核开发有一个原则：内核提供机制，用户空间提供策略。也即内核应提供基础设施的访问机制，而业务逻辑应该留在用户空间解决。基于这一思想，内核提供的基础设施往往十分简陋，这对于通常的驱动和基础架构代码已经足够，但不足以支撑复杂的业务逻辑开发。S8驱动部分代码将应用层业务逻辑强行包含进核，给简单的业务逻辑带来了不必要的复杂性，降低了代码的可扩展和可维护性。本文档从功能和实现角度将S8驱动代码和底层资源做划分，找出适合移动到用户空间的部分，也为开发新功能做参考。</p>
-<p>（一）从IO资源角度分析：</p>
-<p>软件侧总共使用了以下IO资源：内存，中断，GPIO，LED，EERPOM，I2C，DAC，ADC，全局时钟，电源，PWM，USB。</p>
-<h4 id="1-从资源访问的方便性角度分析"><a href="#1-从资源访问的方便性角度分析" class="headerlink" title="(1)从资源访问的方便性角度分析"></a>(1)从资源访问的方便性角度分析</h4><ol>
-<li>内存可以在内核或者用户空间访问。这部分资源的划分原则就是如果涉及的功能必须在内核实现，比如要实现只有内核驱动支持的复杂协议（I2C等），就将其放在内核空间；而如果涉及的功能比较简单且独立，就将其放到用户空间用mmap实现。</li>
-<li>中断可以在内核通过中断子系统处理或者通过U10在用户空间处理。需要特别指出的是，上板的中断会通过中断聚合映射到SCM板的一条中断线上，因为这条线已经被GPIOController之类的内核基础设施占用，所以这个中断不会通过U10映射到用户空间；对于使用其他中断线的使用场景，可以转为在用户空间通过U10实现。</li>
-<li>GPIO的使用分为两部分，一部分是GPIOCONTROLLER驱动，这个作为基础设施必须留在内核，另一部分是对每个GPIO线的申请和使用，这个除非是给迁移后保留在内核的模块使用，其他一律改为在用户空间用libgpiod实现。</li>
-<li>LED由GPIO驱动，其中与业务操作无关的内核线程自动控制的LED仍然留在内核，而通过ioctl提供给用户层的LED可以移动到用户空间控制。</li>
-<li>I2C，DAC，ADC，USB，EEPROM和全局时钟都属于前面提到的实现了只有内核驱动支持的复杂协议，所以要保留在内核不做改变。</li>
-<li>电源指的是A7和USERFPGA的上下电管理功能，由于电源异常时需要SCM在几十毫秒之内响应，所以这些逻辑可以选择保留在内核里，或者单独实现为一个守护进程，开机常驻后台，SCMservic通过进程间通信控制守护进程（如果将SCMservic本身视为一个不会关闭的守护进程则不需要，这里考虑到了调试时SCMservic可能会被手动关闭的场景），又或者将上电机制移动到用户空间，而下电机制保留在线内核。</li>
-<li>PWM用于风扇控制需要一个后台常驻的执行流，可以是内核线程或者一个守护进程（如果将SCMservic本身视为一个不会关闭的守护进程则不需要额外的守护进程）。另外目前风扇转速由电源管理模块控制，所以这两个要一起考量。</li>
-</ol>
-<h4 id="2-S8驱动功能简介"><a href="#2-S8驱动功能简介" class="headerlink" title="(2)S8驱动功能简介"></a>(2)S8驱动功能简介</h4><ol>
-<li><p>master构建了一个struct cell_bottom结构代表SCM板，下挂很多个指针，每个指针由各种子模块初始化时填充，同时export一个全局接口使得所有模块都可以访问所有资源；master还提供大部分子模块的ioctl入口； 特殊的，这个cell_bottom结构还基于设备树用复杂的C代码维护了一套连接器名称，偏移以及连接器所使用电压挡位值的数组，这种复杂的字符串操作没有必要放在内核空间去做，但由于这个功能是连接器设置的基础，如果要迁移到用户空间的话，要十分小心的处理所有依赖。</p>
-</li>
-<li><p>Cell tree这个模块并不是一个常规的驱动，而是聚合了大量的模块与连接器相关操作的utility模块，其中一部分功能只是返回字符串，如top_get_port_voltage_name获取对应连接器电压挡位的名称，因为内核并不适合做类似的字符串操作，所以应该将这部分代码都移动到用户空间；另外涉及GPIO操作和从内核空间读取用户空间&#x2F;sys目录信息的部分也要移动到用户空间。</p>
-</li>
-<li><p>clk-connect-output通过GPIO操作时钟源输出，应该移动到用户空间</p>
-</li>
-<li><p>clock-mux通过GPIO操作18路时钟选择，应该移动到用户空间</p>
-</li>
-<li><p>clk-si570&#x2F;si5338时钟设备驱动，没有好的用户空间替代，保留在内核空间</p>
-</li>
-<li><p>TCA9548 Linux内核标准的I2C SWITCH驱动，不做改变</p>
-</li>
-<li><p>DAC基于I2C的DAC模块，保留在内核空间</p>
-</li>
-<li><p>ADC模块(MCP3422)基于I2C的Linux内核标准ADC驱动，不做改变</p>
-</li>
-<li><p>Daughter模块基于I2C的子卡EEPROM读写模块，保留在内核空间</p>
-</li>
-<li><p>FPGA模块基于内存映射实现bitstream配置，FPGA ID读取，FPGA时钟设置&#x2F;获取，LED灯的控制，FPGA上电后的初始化回调等。在内核中实现的bitstream配置代码十分复杂，不利于扩展和维护，应该移动到用户空间，这个功能的工作量比较大，可以放到后面做。其余的LED控制，FPGA信息读取和设置也可以移动到用户空间。</p>
-</li>
-<li><p>Freq-detector570频率检测模块，通过debugfs输出570信息，用于调试不开放给用户，不需要变动。</p>
-</li>
-<li><p>GPIO Controller模块GPIO controller驱动，提供基础的GPIO功能，保留在内核</p>
-</li>
-<li><p>S2C-I2C模块I2C设备驱动，提供基本的I2C功能，保留在内核</p>
-</li>
-<li><p>IRQ模块提供多路中断聚合功能，保留在内核里。</p>
-</li>
-<li><p>Keyboard模块按键检测模块，依赖GPIOController在中断聚合模块中注册的中断，可以将中断转发到用户空间去处理，可以迁移到用户空间。</p>
-</li>
-<li><p>LED模块总共有3个驱动，u-boot-led，ps-led，s2c-led，前两个是编译到内核开机过程中使用的，第3个是开机后加载并在系统运行过程中使用的，可以将s2c-led中只由用户空间控制的LED操作迁移到用户空间。</p>
-</li>
-<li><p>PWM模块用于风扇控制。为了保证用户进程关闭的情况下风扇仍然受控，保留在内核空间或者移动到一个守护进程中。</p>
-</li>
-<li><p>Firewall模块基于内存映射的A7进行上下电控制，这个模块应跟随上下电模块决定是否迁移。</p>
-</li>
-<li><p>pwr-mgr模块控制上板A7和USERFPGA的上下电，同时根据上电的stage和power控制每个板的风扇转速，保留在内核空间或者移动到一个守护进程中。</p>
-</li>
-<li><p>Pwr-s8模块控制每个上板的上下电，输出相应状态，是pwr-mgr的子模块。</p>
-</li>
-<li><p>Reset模块基于内存映射实现复位脉冲等功能，应该移动到用户空间</p>
-</li>
-<li><p>Ringbus模块基于内存映射实现ringbus功能。值得注意的是ringbus内核层用锁来防止多个执行流并行访问ringbus设备，如果将其移动到应用程序，则若能保证只有SCMservice访问ringbus就只需普通的mutex，若需要保证多进程能够访问ringbus就需要跨进程的同步机制保护。</p>
-</li>
-<li><p>UCD9000电压电流监控模块，相关信息输出到&#x2F;sys目录下，保留在内核</p>
-</li>
-<li><p>decrypt模块U-BOOT开机时将加密的厂商信息从FLASH拷贝到固定的物理地址，再由decrypt模块解密后供其他模块使用。这个功能涉及产品基础，有待讨论。</p>
-</li>
-<li><p>USB模块保留在内核</p>
-</li>
-<li><p>还有一些Linux内核标准的设备驱动未列出。</p>
-</li>
-</ol>
-<h4 id="3-关于debugfs的条目"><a href="#3-关于debugfs的条目" class="headerlink" title="(3)关于debugfs的条目"></a>(3)关于debugfs的条目</h4><p>S8驱动很多模块都将一部分信息导出到debugfs，使得用户可以在linux命令行读取和设置gpio，风扇，连接器电压和操作top板上下电等。这个功能在service和pprt之外提供了另一条访问资源的通道，但如果service和pprt能保证稳定运行的话，似乎本功能提供的冗余没有必要。可以先保留在内核中，之后开发或迁移某个模块时逐条检查该模块对应的debugfs，看是否需要，如需要则提供用户空间的替代或者保留debugfs条目，否则就删除。</p>
-<h4 id="（4）关于上电初始化回调"><a href="#（4）关于上电初始化回调" class="headerlink" title="（4）关于上电初始化回调"></a>（4）关于上电初始化回调</h4><p>上板上电时，先给a7上电，然后调用依赖a7核心模组的驱动模块注册的初始化回调，重新初始化对应模块，初始化和使能连接器，最后给USERFPGA上电。<br>如果上电机制保留在内核，则为了给被移动到用户空间的模块初始化的机会，可以分阶段先上电a7，再调用用户空间的初始化函数，接着初始化和使能连接器，最后给USERFPGA上电。目前被移动到用户空间且具有上电初始化回调的模块有FPGA模块，Ringbus模块。<br>如果上电机制被移动到用户空间，则为了给留在内核的驱动初始化的机会，也要分阶段上电，同时需要重新初始化的内核驱动提供ioctl选项供应用层调用。这种驱动目前有clk-si570，daughter，freq-detect，gpio controller，s2c-i2c,irq, ucd9000。</p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    <a href="/2024/07/12/S8-Device/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/07/08/CI/">
-        <h2 class="post-title">CI</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/7/8
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p> 关于CI技术分享</p>
-<p>1.介绍GitLab CI：<br>GitLab CI（Continuous Integration）是 GitLab 提供的集成持续集成和持续交付（CI&#x2F;CD）功能的一部分。它允许开发团队自动化构建、测试和部署他们的代码，以便更快地交付高质量的软件。通过 GitLab CI，你可以在 GitLab 仓库中配置一个 .gitlab-ci.yml 文件，其中定义了构建、测试和部署的各个阶段和步骤。当你的代码提交到 GitLab 仓库时，GitLab CI 会自动执行你定义的流程，并提供实时的构建和测试结果。<br>一些 GitLab CI 的主要功能包括：<br>⦁	自动构建和测试：当代码发生变更时，GitLab CI 可以自动执行构建和测试任务，确保新的代码不会引入错误。<br>⦁	并行和分布式处理：GitLab CI 允许你同时在多个运行器上运行测试和构建任务，加速整个流程。<br>⦁	容器化支持：GitLab CI 支持使用容器来构建和运行代码，提供更一致的开发和测试环境。<br>⦁	持续交付和部署：你可以配置 GitLab CI 来自动将测试通过的代码部署到生产环境，实现持续交付和持续部署。<br>⦁	自定义流程：通过 .gitlab-ci.yml 文件，你可以定义自己的构建和测试流程，以适应你的项目需求</p>
-<ol start="2">
-<li><p>为什么使用GitLab CI：<br>自动化构建和测试：GitLab CI 允许你在代码提交后自动执行构建和测试任务。这有助于及早发现和解决代码错误，确保代码的稳定性和质量。<br>⦁	快速反馈：自动构建和测试意味着开发人员可以更快地获得关于他们提交的代码质量的反馈。这有助于防止问题在代码库中累积，提高了开发效率。<br>⦁	持续集成：通过持续集成，团队可以频繁地集成代码，减少分支间的差异，避免“集成地狱”。这有助于减少代码冲突和解决集成问题的时间。<br>⦁	自动化部署：GitLab CI 不仅限于构建和测试，还可以自动部署代码到不同环境，如开发、测试和生产环境。这样可以实现持续交付和持续部署，减少人工干预。<br>⦁	一致的构建环境：GitLab CI 支持容器化，确保构建和测试在一致的环境中运行。这可以避免因为开发和测试环境的差异导致的问题。<br>⦁	跨平台支持：GitLab CI 可以用于各种不同的项目和编程语言，支持跨平台开发和部署。</p>
-</li>
-<li><p>基本概念和术语：<br>Runner（执行者）：Runner是一个在项目中运行CI&#x2F;CD作业的实体。它可以是物理服务器、虚拟机、容器等。Runner负责接收来自GitLab的作业请求，并在其上运行这些作业的脚本。有两种类型的Runner：共享Runner（Shared Runner）是由GitLab托管的，可供所有项目使用；特定项目的Runner（Specific Runner）则专门为特定项目配置和使用。</p>
-</li>
-</ol>
-<p>⦁	Job（作业）：Job是CI&#x2F;CD工作的最小单元。它是在Runner上执行的一个命令序列，通常是编译、测试、构建或部署等任务。在一个CI&#x2F;CD流程中，可以定义多个作业，每个作业都有一个唯一的名称，以及一个要运行的脚本或命令。</p>
-<p>⦁	Pipeline（流水线）：Pipeline是一组有序的作业，按照定义的顺序依次执行。每当您推送代码或发生其他触发条件时，GitLab会创建一个新的流水线。流水线可以包含一个或多个阶段（Stage），用于将作业分组，以便您可以在流水线的不同阶段执行不同类型的任务。</p>
-<p>⦁	Stage（阶段）：阶段是流水线中的一个逻辑分组，用于将相关作业组合在一起。一个流水线可以包含多个阶段，每个阶段可以包含一个或多个作业。通常，阶段用于将具有相似目标的作业分组，例如构建、测试、部署等。<br>Stage包含一下三个关键字：<br>⦁	Build（构建）：构建阶段涉及将源代码转换为可执行的应用程序、库或软件包。在这个阶段，通常会执行编译、打包、生成可执行文件等操作，以创建软件的基本构建版本。构建后的产物可以是编译后的代码、二进制文件、库等。构建阶段的目标是确保代码能够成功编译，并且构建过程是可重复的。</p>
-<p>⦁	Test（测试）：测试阶段用于验证构建的软件在不同方面的正确性和稳定性。这包括单元测试、集成测试、端到端测试等。测试的目标是捕获和纠正代码中的错误、漏洞和问题，确保软件在各种情况下都能按预期工作。测试阶段是保障软件质量的关键一步，它帮助开发者及早发现并修复潜在的问题。<br>⦁	Deploy（部署）：部署阶段涉及将经过测试和验证的软件发布到目标环境中，使其对用户可用。这可能包括将应用程序部署到服务器、云平台、移动设备等。部署通常还涉及配置服务器、设置环境变量、安装依赖项等任务，以确保应用程序能够正确运行。部署阶段的目标是将经过验证的软件交付给最终用户，以实现持续交付和持续部署的目标。<br>下图是目前runtime_version_seperate分支上的gitlab-ci.yml文件的部分内容，这部分内容主要是做ut覆盖率的检查。可以通过下面的例子看出一个完整的job是如何组织的；</p>
-<p>学习更多参考官方文档:<br>gitlab-ci-yaml.md (fennay.github.io)<br>GitLab Pages | GitLab</p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    <a href="/2024/07/08/CI/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/07/05/hex-blog-creat-and-push/">
-        <h2 class="post-title"></h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/7/5
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h2 id="hex-blog-creat-and-push"><a href="#hex-blog-creat-and-push" class="headerlink" title="hex blog creat and push"></a>hex blog creat and push</h2><ol>
-<li>进入目录blog</li>
-<li>使用命令 <code>hexo new &quot;xxxx&quot;</code></li>
-<li>使用命令清除缓存 <code>hexo clean</code></li>
-<li>使用命令生成 <code>hexo g</code></li>
-<li>使用命令推送 <code>hexo d</code></li>
-</ol>
-<p>参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/2201_75288693/article/details/138519863">保姆级教学 基于Hexo搭建个人网站（Github）_github 网站-CSDN博客</a></p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    <a href="/2024/07/05/hex-blog-creat-and-push/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2024/07/05/usb/">
-        <h2 class="post-title"></h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2024/7/5
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h2 id="USB使用模型设计"><a href="#USB使用模型设计" class="headerlink" title="USB使用模型设计"></a>USB使用模型设计</h2><p>send</p>
-<p>+———————-+<br>|   Open USB Device    |<br>|      (open)          |<br>+———-+———–+<br>           |<br>           v<br>    +—————+<br>    |   USB Reset   |<br>    |   (usb_reset) |<br>    +——-+——-+<br>            |<br>            v<br>    +—————+<br>    |  Get EP Max   |<br>    | (usb_get_epmax)|<br>    +——-+——-+<br>            |<br>            v<br>    +—————+<br>    | Check Endpoint |<br>    |   Validity    |<br>    +——-+——-+<br>            |<br>            v<br>     +——+———+<br>     | Set Timeout    |<br>     |    Loop        |<br>     +——+———+<br>            |<br>            v<br>      +—–+——–+<br>      | Wait TX Buf  |<br>      | (usb_wait_tx_buf)|<br>      +——+——–+<br>            |<br>     +——v——-+<br>     |   Timeout?   |<br>     +——+——-+<br>            |<br>     +——+——-+ (No)<br>     |    Yes       |<br>     |   Continue  &lt;-+<br>     +——+——-+<br>            |<br>            v<br>     +——+——-+<br>     |   Copy Data  |<br>     |   to Buffer  |<br>     +——+——-+<br>            |<br>            v<br>     +——+——-+<br>     | Submit TX Req|<br>     |(usb_submit_tx)|<br>     +——+——-+<br>            |<br>     +——+——-+ (Success?)<br>     |     Yes       |<br>     |     Loop      |<br>     +——+——-+<br>            |<br>     +——+——-+ (No)<br>     |   Failure     |<br>     |   Exit Loop   |<br>     +——+——-+<br>            |<br>            v<br>    +—————+<br>    |  Close Device |<br>    |     (close)    |<br>    +—————+</p>
-<p>rec</p>
-<ol>
-<li>打开USB设备文件 &#x2F;dev&#x2F;usb&#x2F;scm0。</li>
-<li>如果打开失败，输出错误信息并退出。</li>
-<li>使用 mmap 函数映射共享内存区域，用于读取数据。</li>
-<li>调用 usb_get_epmax 函数获取设备的最大端点数。</li>
-<li>如果获取失败，输出错误信息并退出。</li>
-<li>调用 usb_reset 函数对USB设备进行软复位。</li>
-<li>设置超时时间为1秒。</li>
-<li>进入接收数据的循环。</li>
-<li>调用 usb_wait_rx_buf 函数等待接收缓冲区中的数据。</li>
-<li>如果超时，延迟10毫秒并继续下一次循环。</li>
-<li>如果出现其他错误，输出错误信息并退出循环。</li>
-<li>如果接收到的缓冲区索引或端点索引超出范围，输出错误信息并退出循环。</li>
-<li>如果是第一次接收到数据，记录开始时间。</li>
-<li>计算出接收到数据的目标地址。</li>
-<li>如果端点对应的文件指针为空，创建一个以端点索引命名的文件，并打开以供写入。</li>
-<li>更新接收数据的长度。</li>
-<li>将数据写入到相应的文件中。</li>
-<li>调用 usb_return_rx_buf 函数归还接收缓冲区。</li>
-<li>如果接收到的数据长度不满一个缓冲区大小，则关闭文件，记录结束时间，并计算接收数据的时长和传输速度。</li>
-<li>遍历所有端点，关闭所有已经打开的文件。</li>
-<li>解除共享内存的映射。</li>
-<li>关闭USB设备文件。</li>
-<li>输出退出信息并返回0。</li>
-</ol>
-<p>流程图: 接收数据</p>
-<p>+—————–+               +———————-+<br>| 开始            |               | 打开USB设备文件       |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 打开失败        |               | mmap共享内存          |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 获取最大端点数  |               | usb_get_epmax        |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 获取失败        |               | 调用usb_reset        |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 设置超时时间    |               | 进入接收数据的循环   |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 进入循环       |————–&gt;| 调用usb_wait_rx_buf  |<br>+—————–+               +———————-+<br>        | 接收成功、超时、其他错误     |<br>        v                                  |<br>+—————–+               +———————-+<br>| 处理接收数据    |               | 判断是否超时          |<br>+—————–+               +———————-+<br>        | 接收成功、超时、其他错误     |<br>        v                                  |<br>+—————–+               +———————-+<br>| 判断索引范围    |               | 判断是否超时          |<br>+—————–+               +———————-+<br>        | 超出范围、其他错误             |<br>        v                                  |<br>+—————–+               +———————-+<br>| 第一次接收数据  |               | 计算数据目标地址     |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 计算目标地址    |               | 检查文件指针是否为空  |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 文件指针为空    |               | 更新接收数据长度     |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 更新数据长度    |               | 写入数据到文件       |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 写入文件        |               | 归还接收缓冲区       |<br>+—————–+               +———————-+<br>        | 数据长度不满一缓冲区大小      |<br>        v                                  |<br>+—————–+               +———————-+<br>| 数据长度不满    |————–&gt;| 关闭文件             |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 遍历所有端点   |               | 解除共享内存映射     |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 解除映射        |               | 关闭设备文件         |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 关闭设备文件    |               | 输出退出信息         |<br>+—————–+               +———————-+<br>        |                                  |<br>        v                                  |<br>+—————–+               +———————-+<br>| 输出退出信息    |               | 返回0                |<br>+—————–+               +———————-+</p>
-<h3 id="一、工作原理"><a href="#一、工作原理" class="headerlink" title="一、工作原理"></a>一、工作原理</h3><p>1.根据你提供的工作原理，我理解你需要在Host端和Device端分别运行USBService的实例来支持传输层的握手机制。在Host端，USBService会作为RT客户端的后台线程运行，称为ServerProxy；在Device端，USBService会作为server的后台线程运行，称为HostProxy。</p>
-<p>工作流程如下：</p>
-<ol>
-<li>当RT需要连接SCM server时，它会通知ServerProxy创建一个本地TCP server，并连接到该server。同时，ServerProxy也会尝试打开对应的USB节点。如果USB节点打开失败或者创建TCP server失败，则连接建立失败。</li>
-<li>接着，ServerProxy通过USB传输层协议与HostProxy建立连接，并设置正确的读写权限。</li>
-<li>之后，ServerProxy开始转发RT与SCM server之间的数据。</li>
-<li>当RT退出或主动关闭时，只需关闭TCP socket。ServerProxy会感知到TCP socket关闭，并通过USB传输层协议与HostProxy断开连接。如果连接具有写权限，ServerProxy也会正确地放弃该权限。最后，关闭USB节点和本地TCP server的监听套接字。</li>
-</ol>
-<p>关闭监听套接字的原因是因为在仅支持单连接的前提下，如果不关闭监听套接字，其他试图连接SCM server的RT无法监听ServerProxy的已知端口。另外，USB节点也有仅支持单用户打开的限制，所以也应关闭。</p>
-<p>这个工作流程涉及到TCP连接的管理、USB传输层协议的建立与断开、权限管理等多个方面的操作。需要确保在各种情况下都能正确处理连接的建立和断开，并正确地管理权限和资源释放。</p>
-<p>2.根据你提供的需求，USBService需要像TCP一样定义握手建立连接和挥手关闭连接的过程，并且需要定义额外的传输层协议。你可以像TCP一样定义传输层协议，将用户的数据封装进来。这样做的好处是与业务层解耦，方便扩展更多的传输层功能，但缺点是额外的传输层包头会消耗一部分带宽。</p>
-<p>传输层包头可以定义如下：</p>
-<ul>
-<li>4字节的MAGIC</li>
-<li>4位Reserved</li>
-<li>RST：表示连接重置</li>
-<li>FIN：表示连接结束</li>
-<li>ACK：表示应答</li>
-<li>SYN：表示连接建立</li>
-</ul>
-<p>每个标志位只占用1位。USB只提供单连接，因此不需要端口号区分双方身份。传输协议层不提供数据完整性保证，因此不需要校验和。</p>
-<p>包类型可以定义为：</p>
-<ul>
-<li>数据包(DATA)，其值为RST、FIN、ACK、SYN全为0</li>
-<li>连接建立包(SYN)，其值为SYN&#x3D;1</li>
-<li>应答包(ACK)，其值为ACK&#x3D;1</li>
-<li>连接结束包(FIN)，其值为FIN&#x3D;1</li>
-<li>连接重置包(RST)，其值为RST&#x3D;1</li>
-</ul>
-<p>为了简化设计，不会像TCP那样在带有SYN、ACK、FIN的包中携带有效数据。</p>
-<p>通过这样的定义，USBService就可以提供连接机制，并能够在Host端和Device端之间建立和关闭连接。这种设计既能满足需求，又能保持较小的传输开销。</p>
-<p>3.连接关闭步骤被简化为2次挥手，被动方等待超时后直接退出。这种简化是因为引入重传的逻辑会使代码复杂化，并且可能会导致RT卡住一段时间，对用户不太友好。而且，没有正确关闭连接的代价相对较小。</p>
-<p>针对HostProxy和ServerProxy连接没有正确关闭的情况，处理措施如下：</p>
-<ul>
-<li>如果Server端HostProxy的连接没有正确关闭，则应用层心跳包超时会触发连接关闭。USB物理连接断开或新的连接到达时也会正确释放旧连接，这样可以保证板子资源的可用性。</li>
-<li>如果Host端ServerProxy的连接没有正确关闭，则当ServerProxy在本应关闭的连接上尝试传输数据时，HostProxy会销毁连接并返回错误。</li>
-</ul>
-<p>通过这样的处理措施，可以确保在连接未正确关闭的情况下，仍然能够释放旧连接并防止资源的长时间占用，从而保证系统的稳定性和可靠性。</p>
-
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-        
-    </div>
-    <a href="/2024/07/05/usb/" class="go-post">阅读全文</a>
-</div>
-
-
-        <div class="page-current">
     
-    <span class="current">1</span>
     
     
     
     
-</div>
-
-    </div>
     
-    <div id="home-card">
-        <div id="card-style">
-    <div id="card-div">
-        <div class="avatar">
-            <img src="/images/avatar.jpg" alt="avatar" />
-        </div>
-        <div class="name">ranyue</div>
-        <div class="description">
-            <p>Description<br>…</p>
-
-        </div>
-        
-        
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a target="_blank" rel="noopener" href="https://argvchs.github.io">Argvchs</a>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
-
-    </div>
     
 </div>
 
@@ -653,6 +307,12 @@
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
